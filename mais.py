@@ -31,16 +31,21 @@ async def DMcountdown(seconds, member : discord.Member):
         await member.send(f'YOU HAVE {timer} SECONDS TO GET OUT OF THAT VOICE CHANNEL')
         timer -= 1
         await asyncio.sleep(1)
+        if member.voice.channel.id != asmrChannelid:
+            break
 
 
 @client.event
 async def on_voice_state_update(member : discord.Member, firstVoiceState, newVoiceState):
-    if newVoiceState.channel.id == asmrChannelid:
-        await client.get_channel(announceChannelid).send(f'<@{member.id}> GET OUT OF THAT ASMR CHANNEL THIS VERY SECOND')
-        await DMcountdown(10, member)
-        time.sleep(10)
-        if member.voice.channel.id == asmrChannelid:
-            await member.kick()
+    if newVoiceState.channel != 'None':
+        if newVoiceState.channel.id == asmrChannelid:
+            await client.get_channel(announceChannelid).send(f'<@{member.id}> GET OUT OF THAT ASMR CHANNEL THIS VERY SECOND')
+            await DMcountdown(10, member)
+            time.sleep(10)
+            if member.voice.channel.id == asmrChannelid:
+                await member.kick()
+
+    
 
 
 @client.event
